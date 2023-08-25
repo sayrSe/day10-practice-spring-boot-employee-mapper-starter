@@ -112,7 +112,7 @@ class CompanyApiTest {
     void should_find_companies_by_page() throws Exception {
         Company oocl = companyRepository.save(getCompanyOOCL());
         Company thoughtworks = companyRepository.save(getCompanyThoughtWorks());
-        Company google = companyRepository.save(getCompanyGoogle());
+        companyRepository.save(getCompanyGoogle());
 
         mockMvc.perform(get("/companies")
                         .param("pageNumber", "1")
