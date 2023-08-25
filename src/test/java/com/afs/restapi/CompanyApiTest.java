@@ -71,19 +71,19 @@ class CompanyApiTest {
     @Test
     void should_update_company_name() throws Exception {
         Company previousCompany = companyRepository.save(new Company(null, "Facebook"));
-        Company companyUpdateRequest = new Company(previousCompany.getId(), "Meta");
+        CompanyRequest updatedCompanyRequest = new CompanyRequest("Meta");
         ObjectMapper objectMapper = new ObjectMapper();
-        String updatedEmployeeJson = objectMapper.writeValueAsString(companyUpdateRequest);
+        String updatedCompanyRequestJSON = objectMapper.writeValueAsString(updatedCompanyRequest);
         mockMvc.perform(put("/companies/{id}", previousCompany.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(updatedEmployeeJson))
+                        .content(updatedCompanyRequestJSON))
                 .andExpect(status().is(204));
 
         Optional<Company> optionalCompany = companyRepository.findById(previousCompany.getId());
         assertTrue(optionalCompany.isPresent());
         Company updatedCompany = optionalCompany.get();
         assertEquals(previousCompany.getId(), updatedCompany.getId());
-        assertEquals(companyUpdateRequest.getName(), updatedCompany.getName());
+        assertEquals(updatedCompanyRequest.getName(), updatedCompany.getName());
     }
 
     @Test
