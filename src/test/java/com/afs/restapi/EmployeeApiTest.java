@@ -62,7 +62,7 @@ class EmployeeApiTest {
 
     @Test
     void should_create_employee() throws Exception {
-        EmployeeRequest employeeRequest = getEmployeeRequestAlice();
+        EmployeeRequest employeeRequest = new EmployeeRequest("Alice", 24, "Female", 8000, null);
         ObjectMapper objectMapper = new ObjectMapper();
         String employeeRequestJSON = objectMapper.writeValueAsString(employeeRequest);
         mockMvc.perform(post("/employees")
@@ -168,9 +168,5 @@ class EmployeeApiTest {
         employee.setGender("Female");
         employee.setSalary(12000);
         return employee;
-    }
-
-    private static EmployeeRequest getEmployeeRequestAlice() {
-        return new EmployeeRequest("Alice", 24, "Female", 8000, null);
     }
 }
