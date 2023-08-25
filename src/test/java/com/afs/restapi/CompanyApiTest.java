@@ -59,7 +59,7 @@ class CompanyApiTest {
                 .andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(company.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(company.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employees.length()").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employeesCount").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].id").value(1L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].name").value(employee.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].age").value(employee.getAge()))

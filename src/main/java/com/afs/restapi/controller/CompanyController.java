@@ -1,8 +1,8 @@
 package com.afs.restapi.controller;
 
 import com.afs.restapi.entity.Company;
-import com.afs.restapi.service.CompanyService;
 import com.afs.restapi.entity.Employee;
+import com.afs.restapi.service.CompanyService;
 import com.afs.restapi.service.dto.CompanyRequest;
 import com.afs.restapi.service.dto.CompanyResponse;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public Company getCompanyById(@PathVariable Long id) {
+    public CompanyResponse getCompanyById(@PathVariable Long id) {
         return companyService.findById(id);
     }
 

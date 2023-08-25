@@ -30,9 +30,9 @@ public class CompanyService {
                 .collect(Collectors.toList());
     }
 
-    public Company findById(Long id) {
-        return companyRepository.findById(id)
-                .orElseThrow(CompanyNotFoundException::new);
+    public CompanyResponse findById(Long id) {
+        Company company = companyRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
+        return CompanyMapper.toResponse(company);
     }
 
     public List<Company> findByPage(Integer pageNumber, Integer pageSize) {
