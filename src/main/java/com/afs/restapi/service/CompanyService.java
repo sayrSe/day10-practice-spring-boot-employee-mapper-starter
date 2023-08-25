@@ -24,8 +24,10 @@ public class CompanyService {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<Company> findAll() {
-        return companyRepository.findAll();
+    public List<CompanyResponse> findAll() {
+        return companyRepository.findAll().stream()
+                .map(CompanyMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     public Company findById(Long id) {
@@ -34,7 +36,7 @@ public class CompanyService {
     }
 
     public List<Company> findByPage(Integer pageNumber, Integer pageSize) {
-        return companyRepository.findAll(PageRequest.of(pageNumber-1, pageSize)).stream()
+        return companyRepository.findAll(PageRequest.of(pageNumber - 1, pageSize)).stream()
                 .collect(Collectors.toList());
     }
 
