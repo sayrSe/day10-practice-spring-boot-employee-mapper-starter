@@ -3,12 +3,12 @@ package com.afs.restapi.service.dto;
 public class EmployeeRequest {
 
     private String name;
-    private int age;
+    private Integer age;
     private String gender;
-    private int salary;
+    private Integer salary;
     private Long companyId;
 
-    public EmployeeRequest(String name, int age, String gender, int salary, Long companyId) {
+    public EmployeeRequest(String name, Integer age, String gender, Integer salary, Long companyId) {
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -20,7 +20,7 @@ public class EmployeeRequest {
         return name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
@@ -28,7 +28,7 @@ public class EmployeeRequest {
         return gender;
     }
 
-    public int getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
