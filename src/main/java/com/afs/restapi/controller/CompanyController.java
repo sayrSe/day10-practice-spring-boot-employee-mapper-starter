@@ -1,6 +1,5 @@
 package com.afs.restapi.controller;
 
-import com.afs.restapi.entity.Company;
 import com.afs.restapi.entity.Employee;
 import com.afs.restapi.service.CompanyService;
 import com.afs.restapi.service.dto.CompanyRequest;
@@ -26,7 +25,7 @@ public class CompanyController {
     }
 
     @GetMapping(params = {"pageNumber", "pageSize"})
-    public List<Company> getCompaniesByPage(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+    public List<CompanyResponse> getCompaniesByPage(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
         return companyService.findByPage(pageNumber, pageSize);
     }
 

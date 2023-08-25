@@ -123,8 +123,10 @@ class CompanyApiTest {
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].id").value(oocl.getId()))
                 .andExpect(jsonPath("$[0].name").value(oocl.getName()))
+                .andExpect(jsonPath("$[0].employeesCount").exists())
                 .andExpect(jsonPath("$[1].id").value(thoughtworks.getId()))
-                .andExpect(jsonPath("$[1].name").value(thoughtworks.getName()));
+                .andExpect(jsonPath("$[1].name").value(thoughtworks.getName()))
+                .andExpect(jsonPath("$[1].employeesCount").exists());
     }
 
     @Test

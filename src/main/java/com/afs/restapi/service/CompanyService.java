@@ -8,6 +8,7 @@ import com.afs.restapi.repository.EmployeeRepository;
 import com.afs.restapi.service.dto.CompanyRequest;
 import com.afs.restapi.service.dto.CompanyResponse;
 import com.afs.restapi.service.mapper.CompanyMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +36,10 @@ public class CompanyService {
         return CompanyMapper.toResponse(company);
     }
 
-    public List<Company> findByPage(Integer pageNumber, Integer pageSize) {
-        return companyRepository.findAll(PageRequest.of(pageNumber - 1, pageSize)).stream()
+    public List<CompanyResponse> findByPage(Integer pageNumber, Integer pageSize) {
+        Page<Company> companiesInPage = companyRepository.findAll(PageRequest.of(pageNumber - 1, pageSize));
+        return companiesInPage.stream()
+                .map(CompanyMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
