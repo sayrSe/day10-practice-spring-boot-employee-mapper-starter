@@ -65,7 +65,7 @@ class CompanyApiTest {
                 .andExpect(jsonPath("$.employees[0].name").value(employee.getName()))
                 .andExpect(jsonPath("$.employees[0].age").value(employee.getAge()))
                 .andExpect(jsonPath("$.employees[0].gender").value(employee.getGender()))
-                .andExpect(jsonPath("$.employees[0].salary").value(employee.getSalary()));
+                .andExpect(jsonPath("$.employees[0].salary").doesNotExist());
     }
 
     @Test
