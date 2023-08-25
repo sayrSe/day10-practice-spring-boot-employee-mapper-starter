@@ -22,8 +22,9 @@ public class EmployeeService {
     }
 
     public List<EmployeeResponse> findAll() {
-        List<Employee> employees = employeeRepository.findAll();
-        return employees.stream().map(EmployeeMapper::toResponse).collect(Collectors.toList());
+        return employeeRepository.findAll().stream()
+                .map(EmployeeMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     public EmployeeResponse findById(Long id) {
@@ -56,7 +57,7 @@ public class EmployeeService {
     }
 
     public List<Employee> findByPage(Integer pageNumber, Integer pageSize) {
-        Page<Employee> employeesInThePage = employeeRepository.findAll(PageRequest.of(pageNumber-1, pageSize));
+        Page<Employee> employeesInThePage = employeeRepository.findAll(PageRequest.of(pageNumber - 1, pageSize));
         return employeesInThePage.stream().collect(Collectors.toList());
     }
 
