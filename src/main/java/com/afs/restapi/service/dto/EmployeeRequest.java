@@ -2,11 +2,11 @@ package com.afs.restapi.service.dto;
 
 public class EmployeeRequest {
 
-    private String name;
-    private Integer age;
-    private String gender;
-    private Integer salary;
-    private Long companyId;
+    private final String name;
+    private final Integer age;
+    private final String gender;
+    private final Integer salary;
+    private final Long companyId;
 
     public EmployeeRequest(String name, Integer age, String gender, Integer salary, Long companyId) {
         this.name = name;
