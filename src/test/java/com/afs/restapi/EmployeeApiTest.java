@@ -1,10 +1,9 @@
 package com.afs.restapi;
 
-import com.afs.restapi.service.dto.EmployeeRequest;
 import com.afs.restapi.entity.Employee;
 import com.afs.restapi.repository.EmployeeRepository;
+import com.afs.restapi.service.dto.EmployeeRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -33,6 +33,7 @@ class EmployeeApiTest {
     void setUp() {
         employeeRepository.deleteAll();
     }
+
     @Test
     void should_find_employees() throws Exception {
         Employee bob = employeeRepository.save(getEmployeeBob());
@@ -45,6 +46,7 @@ class EmployeeApiTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value(bob.getGender()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(bob.getSalary()));
     }
+
     @Test
     void should_find_employee_by_gender() throws Exception {
         Employee bob = employeeRepository.save(getEmployeeBob());
@@ -78,7 +80,7 @@ class EmployeeApiTest {
 
     @Test
     void should_update_employee_age_and_salary() throws Exception {
-        Employee previousEmployee = employeeRepository.save(new Employee(null,"Json", 22, "Male", 1000));
+        Employee previousEmployee = employeeRepository.save(new Employee(null, "Json", 22, "Male", 1000));
         EmployeeRequest updatedEmployeeRequest = new EmployeeRequest("lisi", 24, "Female", 2000, null);
         ObjectMapper objectMapper = new ObjectMapper();
         String updatedEmployeeRequestJSON = objectMapper.writeValueAsString(updatedEmployeeRequest);
@@ -90,11 +92,11 @@ class EmployeeApiTest {
         Optional<Employee> optionalEmployee = employeeRepository.findById(previousEmployee.getId());
         assertTrue(optionalEmployee.isPresent());
         Employee updatedEmployee = optionalEmployee.get();
-        Assertions.assertEquals(updatedEmployeeRequest.getAge(), updatedEmployee.getAge());
-        Assertions.assertEquals(updatedEmployeeRequest.getSalary(), updatedEmployee.getSalary());
-        Assertions.assertEquals(previousEmployee.getId(), updatedEmployee.getId());
-        Assertions.assertEquals(previousEmployee.getName(), updatedEmployee.getName());
-        Assertions.assertEquals(previousEmployee.getGender(), updatedEmployee.getGender());
+        assertEquals(updatedEmployeeRequest.getAge(), updatedEmployee.getAge());
+        assertEquals(updatedEmployeeRequest.getSalary(), updatedEmployee.getSalary());
+        assertEquals(previousEmployee.getId(), updatedEmployee.getId());
+        assertEquals(previousEmployee.getName(), updatedEmployee.getName());
+        assertEquals(previousEmployee.getGender(), updatedEmployee.getGender());
     }
 
     @Test
@@ -114,7 +116,7 @@ class EmployeeApiTest {
     void should_find_employees_by_page() throws Exception {
         Employee bob = employeeRepository.save(getEmployeeBob());
         Employee susan = employeeRepository.save(getEmployeeSusan());
-        Employee lily  = employeeRepository.save(getEmployeeLily());
+        Employee lily = employeeRepository.save(getEmployeeLily());
 
         mockMvc.perform(get("/employees")
                         .param("pageNumber", "1")
