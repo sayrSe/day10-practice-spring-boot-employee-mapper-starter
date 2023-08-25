@@ -6,7 +6,6 @@ import com.afs.restapi.repository.CompanyRepository;
 import com.afs.restapi.repository.EmployeeRepository;
 import com.afs.restapi.service.dto.CompanyRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,11 +44,11 @@ class CompanyApiTest {
         Company company = companyRepository.save(getCompanyOOCL());
 
         mockMvc.perform(get("/companies"))
-                .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(company.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value(company.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].employeesCount").exists());
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(company.getId()))
+                .andExpect(jsonPath("$[0].name").value(company.getName()))
+                .andExpect(jsonPath("$[0].employeesCount").exists());
     }
 
     @Test
@@ -56,15 +57,15 @@ class CompanyApiTest {
         Employee employee = employeeRepository.save(getEmployee(company));
 
         mockMvc.perform(get("/companies/{id}", company.getId()))
-                .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(company.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(company.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employeesCount").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].id").value(1L))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].name").value(employee.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].age").value(employee.getAge()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].gender").value(employee.getGender()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].salary").value(employee.getSalary()));
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.id").value(company.getId()))
+                .andExpect(jsonPath("$.name").value(company.getName()))
+                .andExpect(jsonPath("$.employeesCount").value(1))
+                .andExpect(jsonPath("$.employees[0].id").value(1L))
+                .andExpect(jsonPath("$.employees[0].name").value(employee.getName()))
+                .andExpect(jsonPath("$.employees[0].age").value(employee.getAge()))
+                .andExpect(jsonPath("$.employees[0].gender").value(employee.getGender()))
+                .andExpect(jsonPath("$.employees[0].salary").value(employee.getSalary()));
     }
 
     @Test
@@ -76,20 +77,20 @@ class CompanyApiTest {
         mockMvc.perform(put("/companies/{id}", previousCompany.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatedEmployeeJson))
-                .andExpect(MockMvcResultMatchers.status().is(204));
+                .andExpect(status().is(204));
 
         Optional<Company> optionalCompany = companyRepository.findById(previousCompany.getId());
         assertTrue(optionalCompany.isPresent());
         Company updatedCompany = optionalCompany.get();
-        Assertions.assertEquals(previousCompany.getId(), updatedCompany.getId());
-        Assertions.assertEquals(companyUpdateRequest.getName(), updatedCompany.getName());
+        assertEquals(previousCompany.getId(), updatedCompany.getId());
+        assertEquals(companyUpdateRequest.getName(), updatedCompany.getName());
     }
 
     @Test
     void should_delete_company_name() throws Exception {
         Company company = companyRepository.save(getCompanyGoogle());
         mockMvc.perform(delete("/companies/{id}", company.getId()))
-                .andExpect(MockMvcResultMatchers.status().is(204));
+                .andExpect(status().is(204));
 
         assertTrue(companyRepository.findById(company.getId()).isEmpty());
     }
@@ -103,10 +104,10 @@ class CompanyApiTest {
         mockMvc.perform(post("/companies")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(companyRequestJSON))
-                .andExpect(MockMvcResultMatchers.status().is(201))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(notNullValue()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(companyRequest.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employeesCount").exists());
+                .andExpect(status().is(201))
+                .andExpect(jsonPath("$.id").value(notNullValue()))
+                .andExpect(jsonPath("$.name").value(companyRequest.getName()))
+                .andExpect(jsonPath("$.employeesCount").exists());
     }
 
     @Test
@@ -118,12 +119,12 @@ class CompanyApiTest {
         mockMvc.perform(get("/companies")
                         .param("pageNumber", "1")
                         .param("pageSize", "2"))
-                .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(oocl.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value(oocl.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(thoughtworks.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value(thoughtworks.getName()));
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(oocl.getId()))
+                .andExpect(jsonPath("$[0].name").value(oocl.getName()))
+                .andExpect(jsonPath("$[1].id").value(thoughtworks.getId()))
+                .andExpect(jsonPath("$[1].name").value(thoughtworks.getName()));
     }
 
     @Test
@@ -132,13 +133,13 @@ class CompanyApiTest {
         Employee employee = employeeRepository.save(getEmployee(oocl));
 
         mockMvc.perform(get("/companies/{companyId}/employees", oocl.getId()))
-                .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(employee.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value(employee.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(employee.getAge()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value(employee.getGender()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(employee.getSalary()));
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(employee.getId()))
+                .andExpect(jsonPath("$[0].name").value(employee.getName()))
+                .andExpect(jsonPath("$[0].age").value(employee.getAge()))
+                .andExpect(jsonPath("$[0].gender").value(employee.getGender()))
+                .andExpect(jsonPath("$[0].salary").value(employee.getSalary()));
     }
 
     private static Employee getEmployee(Company company) {
